@@ -112,18 +112,16 @@
   (save-excursion
     (goto-char (point-min))
     (let* ((inhibit-read-only t)
+           (prompt (substring-no-properties (minibuffer-prompt)))
 	       (prompt-beg (point-min))
-	       (prompt-end (or (next-property-change (+ 1 (point-min)))
-		                   (max (point-min) (- (point-max) 0))))
-           (prompt (buffer-substring-no-properties prompt-beg prompt-end))
+           (prompt-end (+ 1 (length prompt)))
            (left (if (stringp 'minibuffer-header-format)
                      minibuffer-header-format
                  (funcall minibuffer-header-format prompt)))
            (left (split-string left "\n"))
            (width (- (window-width) (length (car left)) 2))
            (right minibuffer-header-default-message)
-           (right (minibuffer-header--fit right width))
-           )
+           (right (minibuffer-header--fit right width)))
 
       (when minibuffer-header-hide-prompt
         (add-text-properties prompt-beg prompt-end '(invisible t)))
